@@ -1,5 +1,6 @@
 import peasy.*;
 import java.awt.Font;
+import java.util.Calendar;
 
 ArrayList<PFont> fontList = new ArrayList<PFont>();
 ArrayList<GlyphShape> shapeList = new ArrayList<GlyphShape>();
@@ -98,4 +99,15 @@ void draw() {
 
     }
 
+}
+
+void keyReleased() {
+    if (key == 's' || key == 'S') {
+        saveFrame(timestamp()+"_####.png");
+    }
+}
+
+String timestamp() {
+    Calendar now = Calendar.getInstance();
+    return String.format("%1$ty%1$tm%1$td_%1$tH%1$tM%1$tS", now);
 }
