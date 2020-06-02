@@ -10,16 +10,21 @@ int codePointMax = 0x10000; // 𐀀
 int cubeDimension = (int)Math.cbrt(codePointMax);
 
 PeasyCam cam;
+PVector lookAtVector;
 
 void setup() {
-    size(1200, 1200, P3D);
+    size(1200, 1200, OPENGL);
 
+    noStroke();
 
-    cam = new PeasyCam(this, 100);
+    cam = new PeasyCam(this, cubeDimension * fontSize * 1.5);
+    cam.setYawRotationMode();
     cam.setMinimumDistance(50);
-    cam.setMaximumDistance(5000);
-    cam.setWheelScale(0.2);
-    cam.lookAt((double)cubeDimension / 2d, (double)cubeDimension / 2d, (double)cubeDimension / 2d);
+    cam.setMaximumDistance(cubeDimension * fontSize * 2f);
+    cam.setWheelScale(0.01);
+    cam.lookAt((float)cubeDimension * fontSize / 2f, (float)cubeDimension * fontSize / 2f, (float)cubeDimension * fontSize / 2f);
+
+    lookAtVector = new PVector(0, 0, 1);
 
     File dir = new File(sketchPath() + "/data/fonts/");
     File[] listOfFiles = dir.listFiles();
@@ -62,13 +67,13 @@ PFont findCompatibleFont(int codePoint) {
 }
 
 void draw() {
-    background(255);
-    noStroke();
-    fill(0);
+    clear();
 
     int x = 0;
     int y = 0;
     int z = 0;
+
+    float[] cameraPosition = cam.getPosition();
 
     for (int i = 0; i < codePointMax; i++) {
 
@@ -88,7 +93,7 @@ void draw() {
                 map(y, 0, cubeDimension, 0, 255),
                 map(z, 0, cubeDimension, 0, 255)
             );
-            shapeList.get(i).draw(x, y, z);
+            shapeList.get(i).draw(x, y, z, cameraPosition);
         }
 
     }
