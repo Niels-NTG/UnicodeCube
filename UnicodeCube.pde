@@ -7,24 +7,23 @@ ArrayList<PFont> fontList = new ArrayList<PFont>();
 ArrayList<GlyphShape> shapeList = new ArrayList<GlyphShape>();
 float fontSize = 64f;
 
-int codePointMax = 0x1f9ff; // 🧿
+int codePointMax = 0x10000; // 𐀀
 int cubeDimension = (int)Math.cbrt(codePointMax);
 
-Charset utf32;
+Charset utf16;
 
 PeasyCam cam;
 
 void setup() {
     size(1200, 1200, P3D);
 
-    utf32 = Charset.availableCharsets().get("UTF-32");
+    utf16 = Charset.availableCharsets().get("UTF-16");
 
     cam = new PeasyCam(this, 100);
     cam.setMinimumDistance(50);
     cam.setMaximumDistance(5000);
     cam.setWheelScale(0.2);
     cam.lookAt((float)cubeDimension / 2f, (float)cubeDimension / 2f, (float)cubeDimension / 2f);
-
 
     File dir = new File(sketchPath() + "/data/fonts/");
     File[] listOfFiles = dir.listFiles();
@@ -58,7 +57,7 @@ PFont findCompatibleFont(int codePoint) {
 
         if (
             nativeFont.canDisplayUpTo(
-                new String(intToBytes(codePoint), utf32)
+                new String(intToBytes(codePoint), utf16)
             ) == -1
         ) {
             return font;
