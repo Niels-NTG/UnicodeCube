@@ -1,7 +1,6 @@
 import peasy.*;
 import java.awt.Font;
 import java.nio.charset.Charset;
-import java.nio.ByteBuffer;
 
 ArrayList<PFont> fontList = new ArrayList<PFont>();
 ArrayList<GlyphShape> shapeList = new ArrayList<GlyphShape>();
@@ -23,7 +22,7 @@ void setup() {
     cam.setMinimumDistance(50);
     cam.setMaximumDistance(5000);
     cam.setWheelScale(0.2);
-    cam.lookAt((float)cubeDimension / 2f, (float)cubeDimension / 2f, (float)cubeDimension / 2f);
+    cam.lookAt((double)cubeDimension / 2d, (double)cubeDimension / 2d, (double)cubeDimension / 2d);
 
     File dir = new File(sketchPath() + "/data/fonts/");
     File[] listOfFiles = dir.listFiles();
