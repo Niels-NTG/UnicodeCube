@@ -9,14 +9,11 @@ float fontSize = 64f;
 int codePointMax = 0x10000; // 𐀀
 int cubeDimension = (int)Math.cbrt(codePointMax);
 
-Charset utf16;
-
 PeasyCam cam;
 
 void setup() {
     size(1200, 1200, P3D);
 
-    utf16 = Charset.availableCharsets().get("UTF-16");
 
     cam = new PeasyCam(this, 100);
     cam.setMinimumDistance(50);
@@ -34,8 +31,6 @@ void setup() {
             }
         }
     }
-
-    println(fontList.size());
 
     for (int codePoint = 0; codePoint < codePointMax; ++codePoint) {
 
@@ -56,7 +51,7 @@ PFont findCompatibleFont(int codePoint) {
 
         if (
             nativeFont.canDisplayUpTo(
-                new String(intToBytes(codePoint), utf16)
+                new String(new int[]{codePoint}, 0, 1)
             ) == -1
         ) {
             return font;
@@ -98,15 +93,4 @@ void draw() {
 
     }
 
-}
-
-byte[] intToBytes(int x) {
-    byte[] bytes = new byte[] {
-        (byte)(x >>> 24),
-        (byte)(x >>> 16),
-        (byte)(x >>> 8),
-        (byte)x
-    };
-
-    return bytes;
 }
