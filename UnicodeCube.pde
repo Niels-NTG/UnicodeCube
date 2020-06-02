@@ -1,6 +1,5 @@
 import peasy.*;
 import java.awt.Font;
-import java.nio.charset.Charset;
 
 ArrayList<PFont> fontList = new ArrayList<PFont>();
 ArrayList<GlyphShape> shapeList = new ArrayList<GlyphShape>();
@@ -22,6 +21,7 @@ void setup() {
     cam.setMinimumDistance(50);
     cam.setMaximumDistance(cubeDimension * fontSize * 2f);
     cam.setWheelScale(0.01);
+    cam.setResetOnDoubleClick(false);
     cam.lookAt((float)cubeDimension * fontSize / 2f, (float)cubeDimension * fontSize / 2f, (float)cubeDimension * fontSize / 2f);
 
     lookAtVector = new PVector(0, 0, 1);

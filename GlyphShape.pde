@@ -18,7 +18,7 @@ class GlyphShape {
         textFont(font, fontSize);
 
         pushMatrix();
-        // translate(x * fontSize, y * fontSize, z * fontSize);
+        translate(x * fontSize, y * fontSize, z * fontSize);
 
         objectToCameraProjection = new PVector(
             cameraPosition[0] - x * fontSize,
@@ -32,8 +32,8 @@ class GlyphShape {
 
         rotate(acos(angle), upVector.x, upVector.y, upVector.z);
 
+        text(str, 0, 0, 0);
         popMatrix();
-        text(str, x * fontSize, y * fontSize, z * fontSize);
 
     }
 }
