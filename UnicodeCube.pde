@@ -1,29 +1,32 @@
 import peasy.*;
 import java.awt.Font;
 import java.util.Calendar;
+import java.lang.Character.UnicodeBlock;
 
 ArrayList<PFont> fontList = new ArrayList<PFont>();
 ArrayList<GlyphShape> shapeList = new ArrayList<GlyphShape>();
 float fontSize = 64f;
+float glyphShapeSize = 128f;
 
 int codePointMax = 0x10000; // 𐀀
+int codeBlockCount;
 int cubeDimension = (int)Math.cbrt(codePointMax);
 
 PeasyCam cam;
 PVector lookAtVector;
 
 void setup() {
-    size(1200, 1200, OPENGL);
+    size(1200, 1200, P3D);
 
     noStroke();
+    colorMode(HSB, 1f, 1f, 1f);
 
-    cam = new PeasyCam(this, cubeDimension * fontSize * 1.5);
-    cam.setYawRotationMode();
+    cam = new PeasyCam(this, cubeDimension * glyphShapeSize * 1.5);
     cam.setMinimumDistance(50);
-    cam.setMaximumDistance(cubeDimension * fontSize * 2f);
+    cam.setMaximumDistance(cubeDimension * glyphShapeSize * 2f);
     cam.setWheelScale(0.01);
     cam.setResetOnDoubleClick(false);
-    cam.lookAt((float)cubeDimension * fontSize / 2f, (float)cubeDimension * fontSize / 2f, (float)cubeDimension * fontSize / 2f);
+    cam.lookAt((float)cubeDimension * glyphShapeSize / 2f, (float)cubeDimension * glyphShapeSize / 2f, (float)cubeDimension * glyphShapeSize / 2f);
 
     lookAtVector = new PVector(0, 0, 1);
 
@@ -38,11 +41,22 @@ void setup() {
         }
     }
 
+    UnicodeBlock lastCodeBlock = UnicodeBlock.of(0x0);
+    UnicodeBlock currentCodeBlock  = lastCodeBlock;
+    codeBlockCount = 0;
     for (int codePoint = 0; codePoint < codePointMax; ++codePoint) {
 
         PFont font = findCompatibleFont(codePoint);
         if (font != null) {
-            shapeList.add(new GlyphShape(codePoint, font));
+
+            currentCodeBlock = UnicodeBlock.of(codePoint);
+
+            shapeList.add(new GlyphShape(codePoint, codeBlockCount, font));
+
+            if (currentCodeBlock != lastCodeBlock) {
+                codeBlockCount++;
+                lastCodeBlock = currentCodeBlock;
+            }
         } else {
             shapeList.add(null);
         }
@@ -89,11 +103,6 @@ void draw() {
         }
 
         if (shapeList.get(i) != null) {
-            fill(
-                map(x, 0, cubeDimension, 0, 255),
-                map(y, 0, cubeDimension, 0, 255),
-                map(z, 0, cubeDimension, 0, 255)
-            );
             shapeList.get(i).draw(x, y, z, cameraPosition);
         }
 

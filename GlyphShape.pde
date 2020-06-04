@@ -3,27 +3,35 @@ class GlyphShape {
     int codePoint;
     PFont font;
     String str;
+    int unicodeBlockNumber;
 
     private PVector objectToCameraProjection;
     private PVector upVector;
     private float angle = 0;
 
-    GlyphShape(int _codePoint, PFont _font) {
+    GlyphShape(int _codePoint, int _unicodeBlockNumber, PFont _font) {
         this.codePoint = _codePoint;
         this.font = _font;
         this.str = new String(new int[]{codePoint}, 0, 1);
+        this.unicodeBlockNumber = _unicodeBlockNumber;
     }
 
     void draw(int x, int y, int z, float[] cameraPosition) {
-        textFont(font, fontSize);
+        textFont(font);
+        fill(
+            unicodeBlockNumber % 2 == 0 ?
+                1f / (float)codeBlockCount * unicodeBlockNumber :
+                1f - (1f / (float)codeBlockCount * unicodeBlockNumber),
+            1f, 1f
+        );
 
         pushMatrix();
-        translate(x * fontSize, y * fontSize, z * fontSize);
+        translate(x * glyphShapeSize, y * glyphShapeSize, z * glyphShapeSize);
 
         objectToCameraProjection = new PVector(
-            cameraPosition[0] - x * fontSize,
+            cameraPosition[0] - x * glyphShapeSize,
             0,
-            cameraPosition[2] - z * fontSize
+            cameraPosition[2] - z * glyphShapeSize
         );
         objectToCameraProjection.normalize();
         upVector = new PVector();
